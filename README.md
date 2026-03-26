@@ -1,79 +1,91 @@
 # bili-downloader
 
-Download Bilibili videos and auto-generate Chinese subtitles (SRT) using [yt-dlp](https://github.com/yt-dlp/yt-dlp) + [faster-whisper](https://github.com/SYSTRAN/faster-whisper).
+下载 B站视频并自动生成中文字幕（SRT），基于 [yt-dlp](https://github.com/yt-dlp/yt-dlp) + [faster-whisper](https://github.com/SYSTRAN/faster-whisper)。
 
-## Features
+Download Bilibili videos and auto-generate Chinese subtitles using yt-dlp + faster-whisper.
 
-- Download Bilibili videos at best quality
-- Auto-generate Chinese subtitles via Whisper (GPU accelerated)
-- GUI with drag-and-drop URL support
-- Skip already-subtitled videos automatically
-- Cookie support for higher resolution downloads
+---
 
-## Requirements
+## 功能 / Features
+
+- 下载 B站视频（最高画质）/ Download at best quality
+- 自动生成中文字幕（GPU 加速）/ Auto-generate Chinese subtitles via Whisper (CUDA)
+- GUI 支持拖拽链接 / GUI with drag-and-drop URL support
+- 已有字幕的视频自动跳过 / Skip already-subtitled videos
+- 支持 Cookie 提升清晰度 / Cookie support for higher resolution
+
+---
+
+## 环境要求 / Requirements
 
 - Python 3.10+
-- NVIDIA GPU (for subtitle generation with CUDA)
+- NVIDIA GPU（字幕生成需要 CUDA / required for subtitle generation）
 
 ```bash
 pip install yt-dlp faster-whisper imageio-ffmpeg
-pip install tkinterdnd2   # optional, for drag-and-drop in GUI
+pip install tkinterdnd2   # 可选，启用拖拽 / optional, for drag-and-drop
 ```
 
-## Usage
+---
 
-### GUI (recommended)
+## 使用方法 / Usage
+
+### GUI（推荐 / Recommended）
 
 ```bash
 python bili_download_gui.py
 ```
 
-1. Set the **folder name** and **root directory**
-2. Paste or drag Bilibili URLs into the input box
-3. Choose a Whisper model (larger = more accurate, slower)
-4. Click **▶ 下载 + 字幕** to download and generate subtitles
+1. 填写**文件夹名**和**根目录** / Set folder name and root directory
+2. 粘贴或拖入 B站链接 / Paste or drag Bilibili URLs
+3. 选择 Whisper 模型 / Choose a Whisper model
+4. 点击 **▶ 下载 + 字幕** / Click to download and generate subtitles
 
-### Command line
+### 命令行 / Command line
 
-Edit the config section at the top of `bili_download_and_subtitle.py`:
+编辑 `bili_download_and_subtitle.py` 顶部的配置区：
 
 ```python
-FOLDER = "my-videos"      # subfolder name under ROOT
-URLS   = [
+FOLDER = "我的下载"       # 子文件夹名 / subfolder name
+URLS = [
     "https://www.bilibili.com/video/BVxxxxxxxxxx",
 ]
-MODEL  = "large-v3"       # whisper model
-ROOT   = "D:/Downloads/bili"
+MODEL = "large-v3"        # Whisper 模型 / model size
+ROOT  = "D:/Downloads/bili"
 ```
 
-Then run:
+然后运行 / Then run:
 
 ```bash
 python bili_download_and_subtitle.py
 ```
 
-### Output structure
+### 输出结构 / Output structure
 
 ```
 ROOT/
 └── FOLDER/
     ├── video/
-    │   └── video_title.mp4
+    │   └── 视频标题.mp4
     └── subtitle/
-        └── video_title.srt
+        └── 视频标题.srt
 ```
 
-### Cookie (optional)
+### Cookie（可选 / Optional）
 
-To download higher-resolution videos that require login, place a Netscape-format cookie file (`.txt`) in `ROOT/cookie/`.
+将 Netscape 格式的 Cookie 文件（`.txt`）放到 `ROOT/cookie/` 目录下，可下载需要登录才能获取的高清画质。
 
-## Whisper models
+Place a Netscape-format cookie file (`.txt`) in `ROOT/cookie/` to download higher-resolution videos that require login.
 
-| Model | VRAM | Speed | Accuracy |
-|-------|------|-------|----------|
-| tiny | ~1 GB | fastest | lowest |
-| base | ~1 GB | fast | low |
-| small | ~2 GB | fast | ok |
-| medium | ~5 GB | medium | good |
-| large-v2 | ~10 GB | slow | great |
-| large-v3 | ~10 GB | slow | best |
+---
+
+## Whisper 模型对比 / Model comparison
+
+| 模型 / Model | 显存 / VRAM | 速度 / Speed | 准确度 / Accuracy |
+|---|---|---|---|
+| tiny | ~1 GB | 最快 / fastest | 低 / low |
+| base | ~1 GB | 快 / fast | 较低 / low |
+| small | ~2 GB | 快 / fast | 一般 / ok |
+| medium | ~5 GB | 中 / medium | 好 / good |
+| large-v2 | ~10 GB | 慢 / slow | 很好 / great |
+| large-v3 | ~10 GB | 慢 / slow | 最好 / best |
